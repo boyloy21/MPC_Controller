@@ -1,7 +1,7 @@
 import rclpy
 import time
 from rclpy.node import Node
-from std_msgs.msg import String, Int8, Float32
+from std_msgs.msg import String, Int8, Float32,Float32MultiArray
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
 
@@ -13,10 +13,11 @@ class PS4Control(Node):
         super().__init__('PS4_Node')
         self.pub_timer = 0.01
         self.subscribe_joy = self.create_subscription(
-            Joy, "joy", self.subscribe_callback, 10)
+            Joy, "joy", self.subscribe_ps4, 10)
+        
         self.input_controls = self.create_publisher(
             Twist, "/manual", 10)
-        # self.msg_timer = self.create_timer(self.pub_timer, self.pub_callback)
+        self.ps4_timer = self.create_timer(self.pub_timer,self.ps4_callback)
         self.mode_pub = self.create_publisher(String, "/mode", 10)
         self.goal_pub = self.create_publisher(String, "/goal", 10)
         
@@ -28,10 +29,12 @@ class PS4Control(Node):
         self.Omega = 0.0
         self.Speed = 0.0
         self.SpeedAngle = 0.0
-
-    def subscribe_callback(self,joy):
+        
+    def subscribe_ps4(self,joy):
         self.axes_list = joy.axes
         self.button_list = joy.buttons
+        
+    def ps4_callback(self):
         manual = Twist()
         mode = String()
         goal = String()
@@ -44,23 +47,35 @@ class PS4Control(Node):
             self.mode_pub.publish(mode)
             self.get_logger().info('Mode : "%s"' % (mode.data))
         if ((self.button_list[0] == 1)):
-            goal.data = "goal1"
+            goal.data = "success"
             self.goal_pub.publish(goal)
             self.get_logger().info('Goal : "%s"' % (goal.data))
         if ((self.button_list[1] == 1)):
-            goal.data = "goal2"
+            goal.data = "retry"
             self.goal_pub.publish(goal)
             self.get_logger().info('Goal : "%s"' % (goal.data))
         if ((self.button_list[2] == 1)):
-            goal.data = "goal3"
+            goal.data = "silo1"
             self.goal_pub.publish(goal)
             self.get_logger().info('Goal : "%s"' % (goal.data))
         if ((self.button_list[3] == 1)):
-            goal.data = "goal4"
+            goal.data = "silo2"
             self.goal_pub.publish(goal)
             self.get_logger().info('Goal : "%s"' % (goal.data))
         if ((self.button_list[11] == 1)):
-            goal.data = "back1"
+            goal.data = "silo3"
+            self.goal_pub.publish(goal)
+            self.get_logger().info('Goal : "%s"' % (goal.data))
+        if ((self.button_list[12] == 1)):
+            goal.data = "silo4"
+            self.goal_pub.publish(goal)
+            self.get_logger().info('Goal : "%s"' % (goal.data))
+        if ((self.button_list[7] == 1)):
+            goal.data = "silo5"
+            self.goal_pub.publish(goal)
+            self.get_logger().info('Goal : "%s"' % (goal.data))
+        if ((self.button_list[6] == 1)):
+            goal.data = "ball"
             self.goal_pub.publish(goal)
             self.get_logger().info('Goal : "%s"' % (goal.data))
         if (self.axes_list[7] == 1.0):
@@ -75,28 +90,54 @@ class PS4Control(Node):
             self.SpeedAngle -= 0.05
         elif (self.axes_list[6] == 0.0):
             self.SpeedAngle = self.SpeedAngle
-        if (self.axes_list[1] != 0.0):
+        if (self.axes_list[7] == 1.0):
+            self.Speed += 0.01
+        elif (self.axes_list[7] == -1.0):
+            self.Speed -= 0.01
+        elif (self.axes_list[7] == 0.0 ):
+            self.Speed = self.Speed
+        if (self.axes_list[6] == 1.0):
+            self.SpeedAngle += 0.01
+        elif (self.axes_list[6] == -1.0):
+            self.SpeedAngle -= 0.01
+        elif (self.axes_list[6] == 0.0):
+            self.SpeedAngle = self.SpeedAngle
+        if (self.axes_list[1] == 1.0 or self.axes_list[1]== -1.0):
             self.Vx = (self.axes_list[1])*(1.0 + self.Speed)
-            if ((self.Vx < 0.6 and self.Vx > -0.6) or (self.Vx > 2.0 or self.Vx < -2.0)):
+            if ((self.Vx < 1.0 and self.Vx > -1.0) or (self.Vx > 3.0 or self.Vx < -3.0)):
                 self.Vx = 0.0
             manual.linear.x = self.Vx
             self.input_controls.publish(manual)
             self.get_logger().info('Manual control - Linear Velocity X : %f, Linear Velocity Y : %f, Angular Velocity Z : %f' % (self.Vx, self.Vy,self.Omega))
-        if (self.axes_list[0] !=0.0 ):
+        elif (self.axes_list[1] == 0.0):
+            self.Vx = 0.0
+            manual.linear.x = self.Vx
+            self.input_controls.publish(manual)
+            self.get_logger().info('Manual control - Linear Velocity X : %f, Linear Velocity Y : %f, Angular Velocity Z : %f' % (self.Vx, self.Vy,self.Omega))
+        if (self.axes_list[0] == 1.0 or self.axes_list[0] == -1.0):
             self.Vy = (self.axes_list[0])*(1.0 + self.Speed)
-            if ((self.Vy < 0.6 and self.Vy > -0.6) or (self.Vy > 2.0 or self.Vy < -2.0)):
+            if ((self.Vy < 1.0 and self.Vy > -1.0) or (self.Vy > 3.0 or self.Vy < -3.0)):
                 self.Vy = 0.0
             manual.linear.y = self.Vy
             self.input_controls.publish(manual)
             self.get_logger().info('Manual control - Linear Velocity X : %f, Linear Velocity Y : %f, Angular Velocity Z : %f' % (self.Vx, self.Vy,self.Omega))
-        if (self.axes_list[3] !=0.0):
+        elif (self.axes_list[0] == 0.0):
+            self.Vy = 0.0
+            manual.linear.y = self.Vy
+            self.input_controls.publish(manual)
+            self.get_logger().info('Manual control - Linear Velocity X : %f, Linear Velocity Y : %f, Angular Velocity Z : %f' % (self.Vx, self.Vy,self.Omega))
+        if (self.axes_list[3] == 1.0 or self.axes_list[3] == -1.0):
             self.Omega = (self.axes_list[3])*(1.5 + self.SpeedAngle)
-            if ((self.Omega < 0.6 and self.Omega > -0.6) or (self.Omega > 3.14 or self.Omega < -3.14)):
+            if ((self.Omega < 1.0 and self.Omega > -1.0) or (self.Omega > 3.14 or self.Omega < -3.14)):
                 self.Omega = 0.0
             manual.angular.z = self.Omega
             self.input_controls.publish(manual)
             self.get_logger().info('Manual control - Linear Velocity X : %f, Linear Velocity Y : %f, Angular Velocity Z : %f' % (self.Vx, self.Vy,self.Omega))
-        
+        elif ( self.axes_list[3] == 0.0):
+            self.Omega = 0.0
+            manual.angular.z = self.Omega
+            self.input_controls.publish(manual)
+            self.get_logger().info('Manual control - Linear Velocity X : %f, Linear Velocity Y : %f, Angular Velocity Z : %f' % (self.Vx, self.Vy,self.Omega))
 def main(args=None):
     rclpy.init(args=args)
     PS4 = PS4Control()
