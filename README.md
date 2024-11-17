@@ -8,8 +8,5 @@
 # Result 
 ## Mecanum Wheel:
 
-<video width="600" controls>
-  <source src="https://drive.google.com/file/d/16eLXvlm2MWVBZcN9Z4Vl2vmfEn1b_rXm/view?usp=sharing" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[Click here to watch the video](https://drive.google.com/file/d/16eLXvlm2MWVBZcN9Z4Vl2vmfEn1b_rXm/view?usp=sharing)
 
