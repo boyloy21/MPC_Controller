@@ -9,7 +9,7 @@
 ## Mecanum Wheel:
 
 <video width="600" controls>
-  <source src="https://github.com/boyloy21/MPC_Controller/blob/main/mecanum_simulation.mp4" type="video/mp4">
+  <source src="https://drive.google.com/file/d/16eLXvlm2MWVBZcN9Z4Vl2vmfEn1b_rXm/view?usp=sharing" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
