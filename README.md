@@ -8,4 +8,4 @@
 # Result 
 ## Mecanum Wheel:
 
-[![Watch the video](https://via.placeholder.com/600x400?text=Watch+the+Video)](https://drive.google.com/file/d/16eLXvlm2MWVBZcN9Z4Vl2vmfEn1b_rXm/view?usp=sharing)
+[Click here to watch the video](https://drive.google.com/file/d/16eLXvlm2MWVBZcN9Z4Vl2vmfEn1b_rXm/view?usp=sharing)
