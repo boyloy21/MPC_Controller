@@ -7,5 +7,8 @@
 5. Step5: You can choose one to run file simulation (mpc_mecanum_simv.py or omni_mpcSimV1.py)
 # Result 
 ## Mecanum Wheel:
-[![Video Thumbnail](https://path-to-your-thumbnail-image)](https://github.com/boyloy21/MPC_Controller/blob/main/Video_mecanumSimulation.mkv)
+<video width="600" controls>
+  <source src="https://github.com/boyloy21/MPC_Controller/blob/main/mecanum_simulation.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
