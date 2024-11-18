@@ -10,6 +10,6 @@
    
 https://github.com/user-attachments/assets/bcd77c0e-6e73-4fb5-bb47-eac2461ad74f
 
-3. Omni Wheel Testing Hardware using Path Planning:
+2. Omni Wheel Testing Hardware using Path Planning:
 
 https://github.com/user-attachments/assets/f5ac5ce4-5a99-4d36-8f24-50d4fb5b557f
